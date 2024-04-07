@@ -30,7 +30,7 @@ jobs:
 
       - name: Set image tag
         run: |
-          sed -i "s/{{APP_VERSION}}/${{ secrets.APP_VERSION }}/g" docker-compose.production.yml
+          sed -i "s/{{APP_VERSION}}/${{ secrets.APP_VERSION }}/g" docker-compose.yml
 
       - name: Build and push Docker image
         run: |
