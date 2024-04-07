@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp  
+        image: somtuzy/drop-api:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: port
+          valueFrom:
+            secretKeyRef:
+              name: webapp-secret
+              key: port
+        - name: appVersion
+          valueFrom:
+            secretKeyRef:
+              name: webapp-secret
+              key: appVersion
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: 512Mi
+          requests:
+            cpu: "0.25"
+            memory: 256Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort
+  selector:
+    app: webapp
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30000
