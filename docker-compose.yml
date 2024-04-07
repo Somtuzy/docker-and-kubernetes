@@ -7,7 +7,7 @@ services:
     container_name: docker-and-kubernetes_container
     ports:
       - '8000:8080'
-    image: docker-and-kubernetes
+    image: "${DOCKER_USERNAME}/docker-and-kubernetes:${APP_VERSION}"
     volumes:
       - ./:/app
       - /app/node_modules
