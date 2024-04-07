@@ -1,0 +1,13 @@
+version: "3"
+services:
+  docker-and-kubernetes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: docker-and-kubernetes_container
+    ports:
+      - '8000:8080'
+    image: docker-and-kubernetes
+    volumes:
+      - ./:/app
+      - /app/node_modules
