@@ -1,10 +1,11 @@
-name: Sample App
+# Before
+name: Drop API
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "" ]
     
 jobs:
   build:
@@ -21,9 +22,9 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t "${{ secrets.DOCKER_USERNAME }}/test:v1" .
+        docker build -t "${{ secrets.DOCKER_USERNAME }}/drop-api:${{ secrets.APP_VERSION }}" .
         mkdir -p docker-image
-        docker save -o docker-image/image.tar "${{ secrets.DOCKER_USERNAME }}/test:v1"
+        docker save -o docker-image/image.tar "${{ secrets.DOCKER_USERNAME }}/drop-api:${{ secrets.APP_VERSION }}"
 
     - name: Load Docker image
       run: docker load -i docker-image/image.tar
@@ -31,8 +32,7 @@ jobs:
     - name: Log in to Docker Registry and push Docker image
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-        # docker tag "${{ secrets.DOCKER_USERNAME }}/test:v1-$(date +%s)" "${{ secrets.DOCKER_USERNAME }}/test:v1"
-        docker push "${{ secrets.DOCKER_USERNAME }}/test:v1"
+        docker push "${{ secrets.DOCKER_USERNAME }}/drop-api:${{ secrets.APP_VERSION }}"
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
